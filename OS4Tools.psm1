@@ -1,8 +1,12 @@
-function OS4FindInArray
+function Find-OS4InArray
 {
 
 <#
-.SYNOPSYS
+.NAME
+
+Get-OS4FindInArray
+
+.SYNOPSIS
 
 Fonction récursive pour trouver un object dans une liste (array)
 
@@ -24,7 +28,7 @@ function OS4RDRestart
 {
 
 <#
-.SYNOPSYS
+.SYNOPSIS
 
 Démarrage contrôlé d'un serveur ayant le rôle Remote Desktop Services
 
@@ -61,7 +65,7 @@ function OS4RDUserLogoff
 {
 
 <#
-.SYNOPSYS
+.SYNOPSIS
 
 Sortir le utlisateurs d'un serveur Session Host
 
