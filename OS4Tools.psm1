@@ -1,19 +1,6 @@
 function Find-OS4InArray
 {
 
-<#
-  .NAME
-
-  Get-OS4FindInArray
-
-  .SYNOPSIS
-
-  Fonction récursive pour trouver un object dans une liste (array)
-
-  .OUTPUTS
-  Index dans la liste ou -1 si pas trouvé
-
-#>
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -23,6 +10,17 @@ function Find-OS4InArray
         [Int32]$Index
     )
 
+<#
+  .NAME
+  Get-OS4FindInArray
+
+  .SYNOPSIS
+  Fonction récursive pour trouver un object dans une liste (array)
+
+  .OUTPUTS
+  Index dans la liste ou -1 si pas trouvé
+#>
+
     if ($NameToFind -eq $List[$Index]){return $Index } 
         else { if ($index -lt $List.Count) {Find-OS4InArray -NameToFind $NameToFind -List $List -Index ($index+1)} else {return -1}  }
 }
@@ -30,19 +28,19 @@ function Find-OS4InArray
 function OS4RDRestart
 {
 
-<#
-.SYNOPSIS
-
-Démarrage contrôlé d'un serveur ayant le rôle Remote Desktop Services
-
-#>
-
   param([String]$Server,
         [String]$Delay,
         [String]$MessageTitle,
         [String]$MessageBody,
         [String]$SessionHost
    )
+
+<#
+.SYNOPSIS
+
+Démarrage contrôlé d'un serveur ayant le rôle Remote Desktop Services
+
+#>
 
     $RDUserSession = (Get-RDUserSession -ConnectionBroker $Server | Where-Object SessionStat -notlike 'STATED_DISCONNECTED'-ErrorAction SilentlyContinue)
     If ($RDUserSession.Count)
