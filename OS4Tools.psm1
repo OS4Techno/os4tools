@@ -2,13 +2,16 @@ function Find-OS4InArray
 {
 
 <#
-.NAME
+  .NAME
 
-Get-OS4FindInArray
+  Get-OS4FindInArray
 
-.SYNOPSIS
+  .SYNOPSIS
 
-Fonction récursive pour trouver un object dans une liste (array)
+  Fonction récursive pour trouver un object dans une liste (array)
+
+  .OUTPUTS
+  Index dans la liste ou -1 si pas trouvé
 
 #>
     [CmdletBinding()]
@@ -20,8 +23,8 @@ Fonction récursive pour trouver un object dans une liste (array)
         [Int32]$Index
     )
 
-    if ($NameToFind -eq $List[$Index]){return $True } 
-        else { if ($index -lt $List.Count) {OS4FindInArray -NameToFind $NameToFind -List $List -Index ($index+1)} else {return $false}  }
+    if ($NameToFind -eq $List[$Index]){return $Index } 
+        else { if ($index -lt $List.Count) {Find-OS4InArray -NameToFind $NameToFind -List $List -Index ($index+1)} else {return -1}  }
 }
 
 function OS4RDRestart
