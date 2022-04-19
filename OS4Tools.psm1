@@ -4,15 +4,14 @@ function Find-OS4InArray
     [CmdletBinding()]
     param (
         [Parameter()]
-        [String]
-        $NameToFind,
+        [String]$NameToFind,
         [String[]]$List,
         [Int32]$Index
     )
 
 <#
   .NAME
-  Get-OS4FindInArray
+  Find-OS4InArray
 
   .SYNOPSIS
   Fonction récursive pour trouver un object dans une liste (array)
@@ -94,4 +93,26 @@ Sortir le utlisateurs d'un serveur Session Host
       {Invoke-RDUserLogoff -HostServer $Server -UnifiedSessionID $_.UnifiedSessionId -Force}
 
     }
+}
+
+
+function Start-OS4DCSync
+{
+
+<#
+.SYNOPSIS
+
+Synchronise les DCs d'un domaine
+
+.NAME
+  Sart-OS4DCSync
+
+#>
+
+  param()
+
+  $LogonDC = $env:logonserver.remove(0,2)
+  Invoke-Command -ScriptBlock { $DC = (Get-ADdomainController -filter *).Hostname ; ForEach($_ in $DC){repadmin /syncall $_} } -ComputerName $LogonDC
+
+
 }
