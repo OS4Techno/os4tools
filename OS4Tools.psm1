@@ -1,3 +1,11 @@
+
+<#
+  .SYNOPSIS
+  Fonction récursive pour trouver un object dans une liste (array)
+
+  .OUTPUTS
+  Index dans la liste ou -1 si pas trouvé
+#>
 function Find-OS4InArray
 {
 
@@ -9,21 +17,18 @@ function Find-OS4InArray
         [Int32]$Index
     )
 
-<#
-  .NAME
-  Find-OS4InArray
 
-  .SYNOPSIS
-  Fonction récursive pour trouver un object dans une liste (array)
-
-  .OUTPUTS
-  Index dans la liste ou -1 si pas trouvé
-#>
 
     if ($NameToFind -eq $List[$Index]){return $Index } 
         else { if ($index -lt $List.Count) {Find-OS4InArray -NameToFind $NameToFind -List $List -Index ($index+1)} else {return -1}  }
 }
 
+<#
+.SYNOPSIS
+
+Démarrage contrôlé d'un serveur ayant le rôle Remote Desktop Services
+
+#>
 function OS4RDRestart
 {
 
@@ -33,13 +38,6 @@ function OS4RDRestart
         [String]$MessageBody,
         [String]$SessionHost
    )
-
-<#
-.SYNOPSIS
-
-Démarrage contrôlé d'un serveur ayant le rôle Remote Desktop Services
-
-#>
 
     $RDUserSession = (Get-RDUserSession -ConnectionBroker $Server | Where-Object SessionStat -notlike 'STATED_DISCONNECTED'-ErrorAction SilentlyContinue)
     If ($RDUserSession.Count)
@@ -61,6 +59,13 @@ Démarrage contrôlé d'un serveur ayant le rôle Remote Desktop Services
     }
 }
 
+
+<#
+.SYNOPSIS
+
+Sortir le utlisateurs d'un serveur Session Host
+
+#>
 function OS4RDUserLogoff
 {
 
@@ -96,18 +101,14 @@ Sortir le utlisateurs d'un serveur Session Host
 }
 
 
-function Start-OS4DCSync
-{
 
 <#
-.SYNOPSIS
+  .SYNOPSIS
+  Synchronise les DCs d'un domaine
 
-Synchronise les DCs d'un domaine
-
-.NAME
-  Sart-OS4DCSync
-
-#>
+ #>
+ function Start-OS4DCSync
+{ 
 
   param()
 
@@ -116,3 +117,4 @@ Synchronise les DCs d'un domaine
 
 
 }
+
