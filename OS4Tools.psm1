@@ -20,7 +20,7 @@ function Find-OS4InArray
 
 
     if ($NameToFind -eq $List[$Index]){return $Index } 
-        else { if ($index -lt $List.Count) {Find-OS4InArray -NameToFind $NameToFind -List $List -Index ($index+1)} else {return -1}  }
+        else { if ($index -le $List.Count) {Find-OS4InArray -NameToFind $NameToFind -List $List -Index ($index+1)} else {return -1}  }
 }
 
 <#
