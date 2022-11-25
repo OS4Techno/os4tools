@@ -118,3 +118,39 @@ Sortir le utlisateurs d'un serveur Session Host
 
 }
 
+<#
+  .SYNOPSIS
+  Azure DNZ Zone Migration
+
+  .OUTPUTS
+  Supported record type
+
+      A
+      CNAME
+      MX
+      SRV
+      TXT
+ #>
+function New-OS4AzDnsZoneFromDnsZone {
+  param (
+    [String] $SourceDefaultProfile,
+    [String] $TargetDefaultProfile,
+    [String] $ZoneName,
+    [String] $SourceResourceGroupName,
+    [String] $TargetResourceGroupName
+    )
+ 
+    $SourceDNSrecords = Get-AzDnsRecordSet -ZoneName $ZoneName -ResourceGroupName $SourceResourceGroupName -DefaultProfile $SourceDefaultProfile
+    $Records = @{}
+    ForEach($_ in $SourceDNSrecords)
+    {
+      switch ($_.RecordType) {
+        {$_ -contains 'A' }{Write-Host "A"}
+        {$_ -contains 'CNAME' }{Write-Host "CNAME"}
+        {$_ -contains 'MX' }{Write-Host "MX"}
+        {$_ -contains 'SRV' }{Write-Host "SRV"}
+        {$_ -contains 'TXT' }{Write-Host "TXT"}
+        Default {}
+      }
+    }
+}
