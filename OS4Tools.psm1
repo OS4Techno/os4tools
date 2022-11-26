@@ -133,24 +133,55 @@ Sortir le utlisateurs d'un serveur Session Host
  #>
 function New-OS4AzDnsZoneFromDnsZone {
   param (
-    [String] $SourceDefaultProfile,
-    [String] $TargetDefaultProfile,
+    [Microsoft.Azure.Commands.Profile.Models.Core.PSAzureContext] $SourceDefaultProfile,
+    [Microsoft.Azure.Commands.Profile.Models.Core.PSAzureContext] $TargetDefaultProfile,
     [String] $ZoneName,
     [String] $SourceResourceGroupName,
     [String] $TargetResourceGroupName
     )
  
     $SourceDNSrecords = Get-AzDnsRecordSet -ZoneName $ZoneName -ResourceGroupName $SourceResourceGroupName -DefaultProfile $SourceDefaultProfile
-    $Records = @{}
+   
     ForEach($_ in $SourceDNSrecords)
     {
+      $DNSrecord = $_
       switch ($_.RecordType) {
-        {$_ -contains 'A' }{Write-Host "A"}
-        {$_ -contains 'CNAME' }{Write-Host "CNAME"}
-        {$_ -contains 'MX' }{Write-Host "MX"}
-        {$_ -contains 'SRV' }{Write-Host "SRV"}
-        {$_ -contains 'TXT' }{Write-Host "TXT"}
-        Default {}
+        {$_ -contains 'A' }
+                    { $Records = @()
+                      $Ipv4Addresses = $DNSrecord.records.ipv4Address
+                      ForEach($Ipv4 in $Ipv4Addresses){$Records += New-AzDnsRecordConfig -Ipv4Address $Ipv4 }
+                    }
+        {$_ -contains 'CNAME' }
+                    {$Records = @()
+                     $Records += New-AzDnsRecordConfig -Cname $DNSrecord 
+                    }
+        {$_ -contains 'MX' }
+                    { $Records = @()
+                    $AllMX = $DNSrecord.records
+                    ForEach($MX in $AllMX){$Records += New-AzDnsRecordConfig -Exchange $MX.Exchange -Preference $MX.Preference}
+                    }
+        {$_ -contains 'SRV' }
+                    { $Records = @()
+                    $AllSRV = $DNSrecord.records
+                    ForEach($SRV in $AllSRV){$Records += New-AzDnsRecordConfig -Priority $SRV.Priority -Weight $SRV.Weight -Port $SRV.Port -Target $SRV.Target }
+                    }
+        {$_ -contains 'TXT' }
+                    { $Records = @()
+                    $AllTXT = $DNSrecord.records
+                    ForEach($TXT in $ALLTXT){ $Records += New-AzDnsRecordConfig -Value $TXT.Value }
+                    }
+        Default { Write-Host 'Record type ' $_ ' not supported'}
+      } 
+      If ($DNSRecord.RecordType -in ('A','CNAME','MX','SRV','TXT')){
+      New-AzDnsRecordSet `
+        -Name $DNSRecord.Name `
+        -RecordType $DNSRecord.RecordType `
+        -ResourceGroupName $TargetResourceGroupName `
+        -TTL $DNSrecord.TTL `
+        -ZoneName $ZoneName `
+        -DnsRecord $Records `
+        -DefaultProfile $TargetDefaultProfile
       }
+        
     }
 }
