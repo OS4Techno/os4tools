@@ -137,11 +137,14 @@ function New-OS4AzDnsZoneFromDnsZone {
     [Microsoft.Azure.Commands.Profile.Models.Core.PSAzureContext] $TargetDefaultProfile,
     [String] $ZoneName,
     [String] $SourceResourceGroupName,
-    [String] $TargetResourceGroupName
+    [String] $TargetResourceGroupName,
+    [Boolean] $CreateZone,
+    [System.Collections.Hashtable] $Tags
     )
  
     $SourceDNSrecords = Get-AzDnsRecordSet -ZoneName $ZoneName -ResourceGroupName $SourceResourceGroupName -DefaultProfile $SourceDefaultProfile
-   
+    if ($CreateZone){New-AzDnsZone -Name $ZoneName -ResourceGroupName $TargetResourceGroupName -ZoneType Public -Tag $Tags -DefaultProfile $TargetDefaultProfile}
+
     ForEach($_ in $SourceDNSrecords)
     {
       $DNSrecord = $_
@@ -153,7 +156,7 @@ function New-OS4AzDnsZoneFromDnsZone {
                     }
         {$_ -contains 'CNAME' }
                     {$Records = @()
-                     $Records += New-AzDnsRecordConfig -Cname $DNSrecord 
+                     $Records += New-AzDnsRecordConfig -Cname $DNSrecord.Records.Cname 
                     }
         {$_ -contains 'MX' }
                     { $Records = @()
