@@ -188,3 +188,23 @@ function New-OS4AzDnsZoneFromDnsZone {
         
     }
 }
+
+<#
+.SYNOPSIS
+
+Attendre qu'une "Subscription" soit attaché à "Tenant"
+
+#>
+function Wait-OS4Subscription
+{
+
+ param([String]$Subscription,
+        [String]$TargeTenantId
+      )
+
+    For( $i= 0 ; (Get-AzSubscription -SubscriptionID $Subscription -WarningAction SilentlyContinue).TenantID -NE $TargetTenantId ; $i++)
+       {Write-Host"$i minute(s)";Start-Sleep-seconds 60}
+  
+
+    }
+}
