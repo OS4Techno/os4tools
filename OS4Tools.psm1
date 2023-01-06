@@ -206,5 +206,4 @@ function Wait-OS4Subscription
        {Write-Host"$i minute(s)";Start-Sleep-seconds 60}
   
 
-    }
 }
