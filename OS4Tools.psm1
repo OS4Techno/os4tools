@@ -192,7 +192,7 @@ function New-OS4AzDnsZoneFromDnsZone {
 <#
 .SYNOPSIS
 
-Attendre qu'une "Subscription" soit attaché à "Tenant"
+Attendre qu'une "Subscription" soit attachée à "Tenant"
 
 #>
 function Wait-OS4Subscription
