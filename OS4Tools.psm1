@@ -207,3 +207,19 @@ function Wait-OS4Subscription
   
 
 }
+
+<#
+.SYNOPSIS
+
+Obtenir l'information du dernière démarrage
+
+#>
+function Get-OS4LastRestart
+{
+
+ param([String]$Computer
+       )
+
+    (Get-WinEvent -FilterHashtable @{logname = 'System'; id = 1074} -Computer $Computer)[0].TimeCreated
+       
+}
