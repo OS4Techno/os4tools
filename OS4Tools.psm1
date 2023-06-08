@@ -226,8 +226,7 @@ function Get-OS4LastRestart
 <#
 .SYNOPSIS
 
-Valider si un utilisateur s'est authentifié (Selon la capacité du EventLog)
-Voir 
+Valider si un utilisateur s'est authentifié (Selon la capacité du EventLog) 
 
 #>
 function Search-OS4ADUserInEventLog
