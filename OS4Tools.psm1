@@ -223,3 +223,29 @@ function Get-OS4LastRestart
     (Get-WinEvent -FilterHashtable @{logname = 'System'; id = 1074} -Computer $Computer)[0].TimeCreated
        
 }
+<#
+.SYNOPSIS
+
+Valider si un utilisateur s'est authentifié (Selon la capacité du EventLog)
+Voir 
+
+#>
+function Search-OS4ADUserInEventLog
+{
+
+ param([String]$Identity)
+ 
+ $Find = $false
+
+    $DCs = (Get-ADDomainController -Filter *).hostName
+    ForEach($_ in $DCs)
+    {
+      If (!$Find) {
+        $Messages = (Get-eventlog -LogName Security -ComputerName $_ | where-object {$_.EventID -eq 4624})
+        ForEach($MSG in $Messages){if ($MSG.Message.Contains($Identity)){Write-Host "Active";$Find=$True;Break;}}
+      }
+    }
+  
+  If (!$Find){Write-Host "Aucune activité trouvée"}
+  
+}
