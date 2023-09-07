@@ -12,7 +12,7 @@ Connect-AzureAD
 
 Set-Location $HOME
 
- If (Get-Item -Path .\ApplicationUserList.csv){Remove-Item .\ApplicationUserList}
+ If (Get-Item -Path .\ApplicationUserList.csv -ErrorAction SilentlyContinue){Remove-Item .\ApplicationUserList.csv}
       
  ForEach($_ in (Get-AzureADServicePrincipal -All $true))
     {  
