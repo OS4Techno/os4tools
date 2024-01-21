@@ -263,9 +263,12 @@ function New-RandomPassword {
 $Password = ""    
 for($i=0; $i -LT $Length ; $i++)
   {
-     
-     $Password = -join ($Password,[char]((46..46)+(48..57)+(65..90)+(97..122)|Get-Random))
+    switch ($i) {
+      4 {$Password = -join ($Password,[char]((46..46)|Get-Random))}  
+      5 {$Password = -join ($Password,[char]((48..57)|Get-Random))}
+      6 {$Password = -join ($Password,[char]((65..90)|Get-Random))}
+      Default {$Password = -join ($Password,[char]((46..46)+(48..57)+(65..90)+(97..122)|Get-Random))}
+    } 
   }
-
   Return $Password
 }
